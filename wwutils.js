@@ -1,8 +1,14 @@
 /** wwutils.js: Javascript Utility Functions, common to several Winterwell projects
  */
 
+const wwutils = {};
+if (typeof module !== 'undefined') {
+  module.exports = wwutils;
+}
 
 const XId = {};
+wwutils.XId = XId;
+
 /**
  * @param xid
  * @returns the id part of the XId, e.g. "winterstein" from "winterstein@twitter"
@@ -83,7 +89,7 @@ XId.prettyName = function(xid) {
 /** Parse url arguments
  * @param [url] Optional, the string to be parsed, will default to window.location when not provided.
  * @returns a map */
-function getUrlVars(url = window.location.href) {
+wwutils.getUrlVars = function getUrlVars(url = window.location.href) {
 	url = url.replace(/#.*/, '');
 	var s = url.indexOf("?");
 
@@ -124,6 +130,7 @@ const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-
 function isEmail(string) {
 	return !!("string" == typeof(string).toLowerCase() && string.match(emailRegex));
 }
+wwutils.isEmail = isEmail;
 
 
 
@@ -143,6 +150,7 @@ const yessy = function(val) {
 	}
 	return true;
 }
+wwutils.yessy = yessy;
 
 /**
  * @return {string} a unique ID
@@ -160,26 +168,28 @@ const uid = function() {
     var uuid = s.join("");
     return uuid;
 };
+wwutils.uid = uid;
 
-
-const endsWith = function(s, ending) {
+wwutils.endsWith = function(s, ending) {
 	assertMatch(s, String, ending, String);
 	if (s.length < ending.length) return false;
 	const end = s.substring(s.length-ending.length, s.length);
 	return end === ending;
 }
 
+
 /**
  * Try to avoid this! It is much better to not have mixed types.
  * E.g. a consistent string[] is better than string|string[]
  */
-const asArray = function(x) {
+wwutils.asArray = function(x) {
 	return _.isArray(x)? x : [x];
 }
 
 const isPromise = function(x) {
 	return x && x.then && _.isFunction(x.then);
 };
+wwutils.isPromise = isPromise;
 /**
  * @returns wrap the input as a resolved promise -- if it isn't already a promise.
  */
@@ -187,7 +197,7 @@ const asPromise = function(x) {
 	if (isPromise(x)) return x;	
 	return Promise.resolve(x);
 };
-
+wwutils.asPromise = asPromise;
 
 /**
  * Rig obj so that any use of obj.propNames will trigger an Error.
@@ -216,6 +226,4 @@ const blockProperty = function(obj, ...propNames) {
 		}
 	);
 } // ./blockProperty
-
-
-export {XId, getUrlVars, isEmail, yessy, endsWith, uid, asPromise, asArray, blockProperty}
+wwutils.blockProperty = blockProperty;

@@ -1,0 +1,26 @@
+{
+  "name": "wwutils",
+  "version": "1.0.0",
+  "description": "Javascript utility functions from Winterwell",
+  "main": "wwutils.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winterstein/wwutils.js.git"
+  },
+  "keywords": [
+    "utils",
+    "js",
+    "javascript",
+    "blockprop",
+    "blockproperty"
+  ],
+  "author": "Daniel Winterstein",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/winterstein/wwutils.js/issues"
+  },
+  "homepage": "https://github.com/winterstein/wwutils.js#readme"
+}

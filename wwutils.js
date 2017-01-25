@@ -57,7 +57,7 @@ XId.service = function(xid) {
 };
 
 /**
- * @param xid
+ * @param xid Can be null (returns "") or not an XId (returns itself)
  * @returns the first chunk of the XId, e.g. "daniel" from "daniel@winterwell.com@soda.sh"
  * Also dewarts. Will put a leading @ on Twitter handles.
  */
@@ -67,7 +67,8 @@ XId.prettyName = function(xid) {
 	if (i != -1) {
 		id = id.substring(0, i);
 	}
-	if (XId.service(xid) === 'twitter') {
+	// @alice for Twitter
+	if (xid.indexOf('@') !== -1 && XId.service(xid) === 'twitter') {
 		id = '@' + id;
 	}
 	return id;
@@ -178,6 +179,7 @@ wwutils.endsWith = function(s, ending) {
 	const end = s.substring(s.length-ending.length, s.length);
 	return end === ending;
 }
+
 /** Uppercase the first letter, lowercase the rest -- e.g. "dan" to "Daniel" */
 wwutils.toTitleCase = function(s) {
 	if ( ! s) return s;

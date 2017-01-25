@@ -228,24 +228,24 @@ const blockProp = function(obj, ...propNames) {
 wwutils.blockProp = blockProp;
 
 
-/**
- * TODO Rig obj so that any use of obj.propName must assertMatch matchme.
- */
-const typeProp = function(obj, propName, matchme) {	
-	if (obj[propName] !== undefined) {
-		assertMatch(obj[propName], matchme);
-	}
-	Object.defineProperty(obj, propName, { 
-		get: function () { 
-			let v = this[propName];
-			if (v !== undefined) assertMatch(v, matchme);
-			return v;
-		},
-		set: function (v) { 
-			if (v !== undefined) assertMatch(v, matchme);
-			this[propName] = v;
-			// return v; // what does a set return??
-		} 
-	});
-} // ./blockProp
-wwutils.typeProp = typeProp;
+// /**
+//  * TODO Rig obj so that any use of obj.propName must assertMatch matchme.
+//  */
+// const typeProp = function(obj, propName, matchme) {	
+// 	if (obj[propName] !== undefined) {
+// 		assertMatch(obj[propName], matchme);
+// 	}
+// 	Object.defineProperty(obj, propName, { 
+// 		get: function () { 
+// 			let v = this[propName];
+// 			if (v !== undefined) assertMatch(v, matchme);
+// 			return v;
+// 		},
+// 		set: function (v) { 
+// 			if (v !== undefined) assertMatch(v, matchme);
+// 			this[propName] = v;
+// 			// return v; // what does a set return??
+// 		} 
+// 	});
+// } // ./blockProp
+// wwutils.typeProp = typeProp;

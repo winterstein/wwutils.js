@@ -170,13 +170,19 @@ const uid = function() {
 };
 wwutils.uid = uid;
 
+//** String related functions */
+
 wwutils.endsWith = function(s, ending) {
 	assertMatch(s, String, ending, String);
 	if (s.length < ending.length) return false;
 	const end = s.substring(s.length-ending.length, s.length);
 	return end === ending;
 }
-
+/** Uppercase the first letter, lowercase the rest -- e.g. "dan" to "Daniel" */
+wwutils.toTitleCase = function(s) {
+	if ( ! s) return s;
+	return s[0].toUpperCase() + s.substr(1).toLowerCase();
+}
 
 /**
  * Try to avoid this! It is much better to not have mixed types.

@@ -200,30 +200,32 @@ const asPromise = function(x) {
 wwutils.asPromise = asPromise;
 
 /**
- * Rig obj so that any use of obj.propNames will trigger an Error.
+ * Rig obj so that any use of obj.propName will trigger an Error.
+ * @param {!String} propName
+ * @param {?String} message Optional helpful message, like "use foo() instead."
+ * @returns obj (allows for chaining)
  */
-const blockProp = function(obj, ...propNames) {	
-	propNames.map( 
-		propName => {
-			if (obj[propName] !== undefined) {
-				const ex = new Error(propName+" is blocked! Having this property indicates old/broken code.");
-				console.error(ex); // react can swallow stuff
-				throw ex;
-			}
-			Object.defineProperty(obj, propName, { 
-				get: function () { 
-					const ex = new Error(propName+" is blocked! Accessing this property indicates old/broken code."); 
-					console.error(ex); // react can swallow stuff
-					throw ex;					
-				},
-				set: function () { 
-					const ex = new Error(propName+" is blocked! Setting this property indicates old/broken code."); 
-					console.error(ex); // react can swallow stuff
-					throw ex;		
-				} 
-			});
-		}
-	);
+const blockProp = function(obj, propName, message) {	
+	assertMatch(propName, String);
+	if ( ! message) message = "Using this property indicates old/broken code.";
+	if (obj[propName] !== undefined) {
+		const ex = new Error("Having "+propName+" is blocked! "+message);
+		console.error(ex, this); // react can swallow stuff
+		throw ex;
+	}
+	Object.defineProperty(obj, propName, { 
+		get: function () { 
+			const ex = new Error(propName+" is blocked! "+message); 
+			console.error(ex, this); // react can swallow stuff
+			throw ex;					
+		},
+		set: function () { 
+			const ex = new Error("Set "+propName+" is blocked! "+message);
+			console.error(ex, this); // react can swallow stuff
+			throw ex;		
+		} 
+	});
+	return obj;
 } // ./blockProp
 wwutils.blockProp = blockProp;
 

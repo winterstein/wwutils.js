@@ -152,9 +152,9 @@ const yessy = function(val) {
 	if (typeof(val) === 'number' || typeof(val) === 'boolean') {
 		return true;
 	}
-	if (val.length === undefined) {
+	if (typeof(val) === 'object' && val.length === undefined) {
 		assert(typeof(val) !== 'function', "yessy(function) indicates a mistake: "+val);
-		val = Object.keys(val);
+		val = Object.getOwnPropertyNames(val);
 	}
 	if (val.length === 0) {
 		return false;
@@ -190,7 +190,8 @@ wwutils.uid = uid;
 //** String related functions */
 
 wwutils.endsWith = function(s, ending) {
-	assertMatch(s, String, ending, String);
+	assert(typeof(s) === 'string');
+	assert(typeof(ending) === 'string');
 	if (s.length < ending.length) return false;
 	const end = s.substring(s.length-ending.length, s.length);
 	return end === ending;
@@ -230,7 +231,7 @@ wwutils.asPromise = asPromise;
  * @returns obj (allows for chaining)
  */
 const blockProp = function(obj, propName, message) {	
-	assertMatch(propName, String);
+	assert(typeof(propName) === 'string');
 	if ( ! message) message = "Using this property indicates old/broken code.";
 	if (obj[propName] !== undefined) {
 		const ex = new Error("Having "+propName+" is blocked! "+message);

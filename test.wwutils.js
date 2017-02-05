@@ -24,6 +24,7 @@ describe('utils', function() {
 		assert(yessy(['', 'a']));
 		assert(yessy(['a']));
         assert(yessy(-1));
+		assert( yessy(new Error("foo")), new Error("foo") );
 
 		assert( ! yessy(false));
 		assert( ! yessy(undefined));

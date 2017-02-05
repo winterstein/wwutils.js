@@ -6,6 +6,15 @@ if (typeof module !== 'undefined') {
   module.exports = wwutils;
 }
 
+// hopefully we have from SJTest but if not define assert
+if (typeof assert === 'undefined') {
+	var assert = function(ok, msg) {
+        if (ok) return;
+        console.error(msg);
+        throw new Error(msg);
+    }
+}
+
 const XId = {};
 wwutils.XId = XId;
 
@@ -136,10 +145,17 @@ wwutils.isEmail = isEmail;
 
 
 /**
-Like truthy, but [] amd [''] are also false
+Like truthy, but {}, [] amd [''] are also false
 */
 const yessy = function(val) {
 	if ( ! val) return false;
+	if (typeof(val) === 'number' || typeof(val) === 'boolean') {
+		return true;
+	}
+	if (val.length === undefined) {
+		assert(typeof(val) !== 'function', "yessy(function) indicates a mistake: "+val);
+		val = Object.keys(val);
+	}
 	if (val.length === 0) {
 		return false;
 	}

@@ -1,6 +1,6 @@
 {
   "name": "wwutils",
-  "version": "0.5.9",
+  "version": "0.6.0",
   "description": "Javascript utility functions from Winterwell",
   "main": "wwutils.js",
   "scripts": {

@@ -238,6 +238,10 @@ const blockProp = function(obj, propName, message) {
 		console.error(ex, this); // react can swallow stuff
 		throw ex;
 	}
+	if ( ! Object.isExtensible(obj)) {	
+		// no need -- frozen or sealed	
+		return;
+	}
 	Object.defineProperty(obj, propName, { 
 		get: function () { 
 			const ex = new Error(propName+" is blocked! "+message); 

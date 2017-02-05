@@ -37,6 +37,16 @@ describe('utils', function() {
 
 
     it('blockProp', function() {
+		{	// frozen object
+			let obj = {a:1}
+			Object.freeze(obj);
+			blockProp(obj, 'b');	
+		}
+		{	// sealed object
+			let obj = {a:1}
+			Object.seal(obj);
+			blockProp(obj, 'b');	
+		}
 		const obj = {};
 		blockProp(obj, 'a');
 		let ok = true;

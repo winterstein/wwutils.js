@@ -258,6 +258,17 @@ const blockProp = function(obj, propName, message) {
 } // ./blockProp
 wwutils.blockProp = blockProp;
 
+/**
+ * Wrap a function to make sure errors are heard! Catch errors, send them to console, and rethrow.
+ */
+wwutils.noisy = function(fn) {
+	try {
+		fn();
+	} catch(err) {
+		console.error(err);
+		throw err;
+	}
+};
 
 // /**
 //  * TODO Rig obj so that any use of obj.propName must assertMatch matchme.

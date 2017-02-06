@@ -77,8 +77,13 @@ XId.prettyName = function(xid) {
 		id = id.substring(0, i);
 	}
 	// @alice for Twitter
-	if (xid.indexOf('@') !== -1 && XId.service(xid) === 'twitter') {
+	const service = XId.service(xid);
+	if (xid.indexOf('@') !== -1 && service === 'twitter') {
 		id = '@' + id;
+	}
+	// Web? shorten the url
+	if (service==='Web') {
+		// TODO how to shorten a url? crib from SoDash
 	}
 	return id;
 };

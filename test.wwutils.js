@@ -35,6 +35,21 @@ describe('utils', function() {
         assert( ! yessy({}));
     }); // ./yessy
 
+	it('randomPick', function() {
+		{	// test fairness
+			let x = ['a','b'];
+			let cnta=0, cntb=0;
+			for(let i=0; i<100; i++) {
+				let rp = Utils.randomPick(x);
+				if (rp==='a') cnta++;
+				else if (rp==='b') cntb++;
+				else throw new Error("odd pick "+rp);
+			}
+			assert(cnta > 20 && cntb > 20);
+			console.log("cnta",cnta,"cntb",cntb);
+		}
+	});
+
 
     it('blockProp', function() {
 		{	// frozen object

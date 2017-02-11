@@ -275,6 +275,16 @@ wwutils.noisy = function(fn) {
 	}
 };
 
+/**
+ * @param list {?Object[]}
+ * @returns random item from list, or null if list is empty/null.
+ */
+wwutils.randomPick = function(list) {
+	if ( ! list) return null;
+	let i = Math.floor( Math.random() * list.length);
+	return list[i];
+}
+
 // /**
 //  * TODO Rig obj so that any use of obj.propName must assertMatch matchme.
 //  */

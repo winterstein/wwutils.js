@@ -104,7 +104,8 @@ XId.prettyName = function(xid) {
 /** Parse url arguments
  * @param [url] Optional, the string to be parsed, will default to window.location when not provided.
  * @returns a map */
-wwutils.getUrlVars = function getUrlVars(url = window.location.href) {
+wwutils.getUrlVars = function getUrlVars(url) {
+	url = url || window.location.href;
 	url = url.replace(/#.*/, '');
 	var s = url.indexOf("?");
 
@@ -120,9 +121,9 @@ wwutils.getUrlVars = function getUrlVars(url = window.location.href) {
 		var e = kv.indexOf("=");
 
 		if (e != -1 && e != kv.length - 1) {
-			let k = kv.substring(0, e);
+			var k = kv.substring(0, e);
 			k = decodeURIComponent(k.replace(/\+/g, ' '));
-			let v = kv.substring(e + 1);
+			var v = kv.substring(e + 1);
 			v = decodeURIComponent(v.replace(/\+/g, ' '));
 			urlVars[k] = v;
 		} else {
@@ -165,7 +166,7 @@ const yessy = function(val) {
 		return false;
 	}
 	if (val.length) {
-		for (let i =0; i<val.length; i++) {
+		for (var i = 0; i < val.length; i++) {
 			if (val[i]) return true;
 		}
 		return false;
@@ -281,7 +282,7 @@ wwutils.noisy = function(fn) {
  */
 wwutils.randomPick = function(list) {
 	if ( ! list) return null;
-	let i = Math.floor( Math.random() * list.length);
+	var i = Math.floor( Math.random() * list.length);
 	return list[i];
 }
 

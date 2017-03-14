@@ -210,6 +210,16 @@ wwutils.toTitleCase = function(s) {
 }
 
 /**
+ * Truncate text length.
+ */
+wwutils.ellipsize = function(s, maxLength) {
+	if ( ! s) return s;
+	if ( ! maxLength) maxLength = 140;
+	if (s.length <= maxLength) return s;
+	return s.substr(0, maxLength - 2)+' &hellip;';
+};
+
+/**
  * Try to avoid this! It is much better to not have mixed types.
  * E.g. a consistent string[] is better than string|string[]
  */
@@ -284,6 +294,17 @@ wwutils.randomPick = function(list) {
 	if ( ! list) return null;
 	var i = Math.floor( Math.random() * list.length);
 	return list[i];
+}
+
+/**
+ * e.g. winterwell.com from http://www.winterwell.com/stuff
+ */
+wwutils.getHost = function(url) {
+    var a = document.createElement('a');
+    a.href = url;
+    var host = a.hostname;
+	if (host.startsWith("www.")) host = host.substr(4);
+	return host;
 }
 
 // /**

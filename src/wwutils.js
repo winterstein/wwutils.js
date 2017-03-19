@@ -175,6 +175,19 @@ const yessy = function(val) {
 }
 wwutils.yessy = yessy;
 
+
+wwutils.getStackTrace() = function() {
+	try {
+		const stack = new Error().stack;
+		// stacktrace, chop leading "Error at Object." bit
+		let stacktrace = (""+stack).replace(/\s+/g,' ').substr(16);
+		return stacktrace;
+	} catch(error) {
+		// oh well
+		return "";
+	}
+}
+
 /**
  * @return {string} a unique ID
  */

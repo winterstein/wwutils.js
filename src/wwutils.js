@@ -249,7 +249,14 @@ wwutils.asPromise = asPromise;
 const blockProp = function(obj, propName, message) {	
 	assert(typeof(propName) === 'string');
 	if ( ! message) message = "Using this property indicates old/broken code.";
+	try {
+		// already blocked?	
+		let v = obj[propName];
+	} catch (err) {
+		return obj;
+	}
 	if (obj[propName] !== undefined) {
+		// already set to a value :(
 		const ex = new Error("Having "+propName+" is blocked! "+message);
 		console.error(ex, this); // react can swallow stuff
 		throw ex;

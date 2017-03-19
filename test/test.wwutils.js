@@ -1,5 +1,11 @@
-// import {yessy,blockProp} from './wwutils.js';
-const Utils = require('./wwutils.js');
+
+// let Utils;
+// if (typeof Utils === undefined && typeof require !== undefined) {
+Utils = require('../bin/wwutils.js');
+// }
+// if ( ! Utils && ! blockProp) {
+// 	console.error("No wwutils :(");
+// }
 
 if (typeof(assert) === 'undefined') {
     function assert(ok, msg) {
@@ -50,6 +56,11 @@ describe('utils', function() {
 		}
 	});
 
+    it('blockPropx2', function() {
+		let obj = {a:1}
+		blockProp(obj, 'b');	
+		blockProp(obj, 'b');	
+	});
 
     it('blockProp', function() {
 		{	// frozen object

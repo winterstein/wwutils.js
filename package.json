@@ -1,8 +1,8 @@
 {
   "name": "wwutils",
-  "version": "0.6.6",
+  "version": "0.7.0",
   "description": "Javascript utility functions from Winterwell",
-  "main": "wwutils.js",
+  "main": "./bin/wwutils.js",
   "scripts": {
     "test": "mocha test.wwutils.js"
   },
@@ -22,5 +22,20 @@
   "bugs": {
     "url": "https://github.com/winterstein/wwutils.js/issues"
   },
-  "homepage": "https://github.com/winterstein/wwutils.js#readme"
+  "homepage": "https://github.com/winterstein/wwutils.js#readme",
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-register": "^6.24.0"
+  },
+  "scripts": {
+    "build": "babel src --out-dir bin",
+    "watch": "babel src --out-dir bin --watch",
+    "prepublish": "npm run build"
+  }
 }

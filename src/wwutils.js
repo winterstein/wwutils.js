@@ -15,6 +15,20 @@ if (typeof assert === 'undefined') {
     }
 }
 
+/**
+ * @param unescapedHash e.g. "foo=bar"
+ */
+wwutils.setHash = function(unescapedHash) {
+	assert(unescapedHash[0] !== '#', "No leading # please on "+unescapedHash);
+	if (history.pushState) {
+		history.pushState(null, null, '#'+escape(unescapedHash));
+	} else {
+		// fallback for old browsers
+		location.hash = '#'+escape(unescapedHash);
+	}
+};
+
+
 const XId = {};
 wwutils.XId = XId;
 
@@ -176,7 +190,7 @@ const yessy = function(val) {
 wwutils.yessy = yessy;
 
 
-wwutils.getStackTrace() = function() {
+wwutils.getStackTrace = function() {
 	try {
 		const stack = new Error().stack;
 		// stacktrace, chop leading "Error at Object." bit

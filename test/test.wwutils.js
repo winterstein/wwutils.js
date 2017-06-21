@@ -32,6 +32,7 @@ describe('utils', function() {
         assert(yessy(-1));
 		assert( yessy(new Error("foo")), new Error("foo") );
 
+		assert( ! yessy(0));	
 		assert( ! yessy(false));
 		assert( ! yessy(undefined));
 		assert( ! yessy(null));

@@ -165,7 +165,7 @@ wwutils.isEmail = isEmail;
 
 
 /**
-Like truthy, but {}, [] amd [''] are also false
+Like truthy, but {}, [] amd [''] are also false alongside '', 0 and false.
 */
 const yessy = function(val) {
 	if ( ! val) return false;

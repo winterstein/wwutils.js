@@ -17,6 +17,7 @@ if (typeof assert === 'undefined') {
 
 /**
  * @param unescapedHash e.g. "foo=bar"
+ * This must be the whole post-hash state.
  */
 wwutils.setHash = function(unescapedHash) {
 	assert(unescapedHash[0] !== '#', "No leading # please on "+unescapedHash);
@@ -27,7 +28,46 @@ wwutils.setHash = function(unescapedHash) {
 		location.hash = '#'+escape(unescapedHash);
 	}
 };
+/**
+ * Note: params are always string valued, e.g. "1" not 1
+ * @return {path: String[], params}
+ */
+wwutils.parseHash = function(hash = window.location.hash) {
+	let params = wwutils.getUrlVars(hash);
+	// Pop the # and peel off eg publisher/myblog NB: this works whether or not "?"" is present
+	let page = hash.substring(1).split('?')[0];
+	const path = page.split('/');
+	return {path, params};
+}
 
+/**
+ * @param {?String[]} newpath Can be null for no-change
+ * @param {?Object} newparams Can be null for no-change
+ */
+wwutils.modifyHash = function(newpath, newparams) {
+	const {path, params} = wwutils.parseHash();
+	let allparams = (params || {});
+	allparams = Object.assign(allparams, newparams);
+	if ( ! newpath) newpath = path || [];
+	let hash = escape(newpath.join('/'));
+	if (wwutils.yessy(allparams)) {
+		hash += "?" + wwutils.mapkv(allparams, (k,v) => escape(k)+"="+escape(v)).join('&');
+	}
+	if (history.pushState) {
+		history.pushState(null, null, '#'+hash);
+	} else {
+		// fallback for old browsers
+		location.hash = '#'+hash;
+	}	
+};
+
+/**
+ * Map fn across the (key, value) properties of obj.
+ * ??Is there a ntive way to do this??
+ */
+wwutils.mapkv = function(obj, fn) {
+	return Object.keys(obj).map(k => fn(k, obj[k]));
+};
 
 const XId = {};
 wwutils.XId = XId;
@@ -120,7 +160,7 @@ XId.prettyName = function(xid) {
  * @returns a map */
 wwutils.getUrlVars = function getUrlVars(url) {
 	url = url || window.location.href;
-	url = url.replace(/#.*/, '');
+	// url = url.replace(/#.*/, ''); Why was this here?! DW
 	var s = url.indexOf("?");
 
 	if (s == -1 || s == url.length - 1) return {};

@@ -1,7 +1,7 @@
 
 // let Utils;
 // if (typeof Utils === undefined && typeof require !== undefined) {
-Utils = require('../bin/wwutils.js');
+// Utils = require('../bin/wwutils.js');
 // }
 // if ( ! Utils && ! blockProp) {
 // 	console.error("No wwutils :(");
@@ -15,12 +15,53 @@ if (typeof(assert) === 'undefined') {
     }
 }
 
-const blockProp = Utils.blockProp;
-const yessy = Utils.yessy;
+// const blockProp = Utils.blockProp;
+// const yessy = Utils.yessy;
 
 
 describe('utils', function() {
     this.timeout(200);
+
+	it('parseHash', function() {		
+		{
+			let ph = wwutils.parseHash('#foo?a=1');
+			assert(ph.path[0] === 'foo', JSON.stringify(ph));			
+			assert(ph.params.a === "1", JSON.stringify(ph));
+		}
+		{
+			let ph = wwutils.parseHash('#foo/bar?a=2&b=2');
+			assert(ph.path[0] === 'foo', JSON.stringify(ph));
+			assert(ph.params.a === "2", JSON.stringify(ph));
+		}
+    }); // ./parseHash
+
+
+	it('modifyHash', function() {		
+		let obj = {a: 1, b:2};
+		window.location.hash = '#foo?a=1';
+		wwutils.modifyHash(['path1', 'path2']);
+		assert(window.location.hash.indexOf('path1/path2') !== -1, window.location.hash);
+		
+		wwutils.modifyHash(null, {a: 2, b: "Bee:=)"});
+		
+		assert(window.location.hash.indexOf('path1/path2') !== -1, window.location.hash);
+		assert(window.location.hash.indexOf('a=2') !== -1, window.location.hash);
+
+		let {path, params} = wwutils.parseHash();
+		assert(path[0] === 'path1', path);
+		assert(path[1] === 'path2', path);
+		assert(params.a === "2", JSON.stringify(params));
+		assert(params.b === "Bee:=)", JSON.stringify(params));
+    }); // ./modifyHash
+
+    it('mapkv', function() {
+		let obj = {a: 1, b:2};
+		let kvs = wwutils.mapkv(obj, (k,v) => k+"="+v);
+    	assert(kvs.length === 2);
+		assert(kvs[0] === 'a=1');
+		let joined = kvs.join('&');
+		assert(joined === 'a=1&b=2');
+    }); // ./mapkv
 
     it('yessy', function() {
     	assert(yessy(1), 1);
@@ -47,7 +88,7 @@ describe('utils', function() {
 			let x = ['a','b'];
 			let cnta=0, cntb=0;
 			for(let i=0; i<100; i++) {
-				let rp = Utils.randomPick(x);
+				let rp = wwutils.randomPick(x);
 				if (rp==='a') cnta++;
 				else if (rp==='b') cntb++;
 				else throw new Error("odd pick "+rp);

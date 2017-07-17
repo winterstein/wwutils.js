@@ -53,6 +53,15 @@ describe('utils', function() {
 		assert(params.a === "2", JSON.stringify(params));
 		assert(params.b === "Bee:=)", JSON.stringify(params));
     }); // ./modifyHash
+	
+	it('modifyHash null', function() {		
+		window.location.hash = '#foo?a=1';
+		wwutils.modifyHash([], {a:null, b:''});
+		assert(window.location.hash === '#?a=&b=', window.location.hash);
+		let {path, params} = wwutils.parseHash();
+		assert(path.length===0, "path"+JSON.stringify(path));
+		assert( ! params.a, params.a);
+    }); // ./modifyHash-null
 
     it('mapkv', function() {
 		let obj = {a: 1, b:2};

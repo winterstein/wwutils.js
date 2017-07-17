@@ -30,13 +30,14 @@ wwutils.setHash = function(unescapedHash) {
 };
 /**
  * Note: params are always string valued, e.g. "1" not 1
+ * No path will return as []
  * @return {path: String[], params}
  */
 wwutils.parseHash = function(hash = window.location.hash) {
 	let params = wwutils.getUrlVars(hash);
 	// Pop the # and peel off eg publisher/myblog NB: this works whether or not "?"" is present
 	let page = hash.substring(1).split('?')[0];
-	const path = page.split('/');
+	const path = page.length? page.split('/') : [];
 	return {path, params};
 }
 
@@ -51,7 +52,8 @@ wwutils.modifyHash = function(newpath, newparams) {
 	if ( ! newpath) newpath = path || [];
 	let hash = escape(newpath.join('/'));
 	if (wwutils.yessy(allparams)) {
-		hash += "?" + wwutils.mapkv(allparams, (k,v) => escape(k)+"="+escape(v)).join('&');
+		let kvs = wwutils.mapkv(allparams, (k,v) => escape(k)+"="+(v===null||v===undefined? '' : escape(v)) );
+		hash += "?" + kvs.join('&');
 	}
 	if (history.pushState) {
 		history.pushState(null, null, '#'+hash);

@@ -24,6 +24,12 @@ describe('utils', function() {
 
 	it('parseHash', function() {		
 		{
+			let ph = wwutils.parseHash('#?a=');
+			assert(ph.path.length === 0, JSON.stringify(ph));			
+			assert( ! ph.params.a, JSON.stringify(ph));
+			assert(ph.params.a === "", JSON.stringify(ph));
+		}
+		{
 			let ph = wwutils.parseHash('#foo?a=1');
 			assert(ph.path[0] === 'foo', JSON.stringify(ph));			
 			assert(ph.params.a === "1", JSON.stringify(ph));

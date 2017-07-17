@@ -176,11 +176,14 @@ wwutils.getUrlVars = function getUrlVars(url) {
 		if ( ! kv) continue; // ignore trailing &
 		var e = kv.indexOf("=");
 
-		if (e != -1 && e != kv.length - 1) {
-			var k = kv.substring(0, e);
+		if (e != -1) {
+			let k = kv.substring(0, e);
 			k = decodeURIComponent(k.replace(/\+/g, ' '));
-			var v = kv.substring(e + 1);
-			v = decodeURIComponent(v.replace(/\+/g, ' '));
+			let v = '';
+			if (e !== kv.length - 1) {
+				v = kv.substring(e + 1);
+				v = decodeURIComponent(v.replace(/\+/g, ' '));
+			}
 			urlVars[k] = v;
 		} else {
 			urlVars[kv] = '';

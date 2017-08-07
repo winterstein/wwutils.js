@@ -20,9 +20,11 @@ if (typeof assert === 'undefined') {
  * This must be the whole post-hash state.
  */
 wwutils.setHash = function(unescapedHash) {
-	assert(unescapedHash[0] !== '#', "No leading # please on "+unescapedHash);
-	if (history.pushState) {
+	assert(unescapedHash[0] !== '#', "No leading # please on "+unescapedHash);	
+	if (history && history.pushState) {
+		let oldURL = window.location;
 		history.pushState(null, null, '#'+escape(unescapedHash));
+		fireHashChangeEvent({oldURL});
 	} else {
 		// fallback for old browsers
 		location.hash = '#'+escape(unescapedHash);
@@ -54,13 +56,27 @@ wwutils.modifyHash = function(newpath, newparams) {
 	if (wwutils.yessy(allparams)) {
 		let kvs = wwutils.mapkv(allparams, (k,v) => escape(k)+"="+(v===null||v===undefined? '' : escape(v)) );
 		hash += "?" + kvs.join('&');
-	}
-	if (history.pushState) {
+	}	
+	if (history && history.pushState) {
+		let oldURL = window.location;
 		history.pushState(null, null, '#'+hash);
+		// generate the hashchange event
+		fireHashChangeEvent({oldURL});
+
 	} else {
 		// fallback for old browsers
 		location.hash = '#'+hash;
 	}	
+};
+
+let fireHashChangeEvent = function({oldURL}) {
+	// NB IE9+ I think
+	// TODO add in newURL and oldURL
+	let e = new HashChangeEvent('hashchange', {
+		newURL: window.location,
+		oldURL: oldURL
+	});	
+  	window.dispatchEvent(e);
 };
 
 /**

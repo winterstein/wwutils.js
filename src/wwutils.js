@@ -6,6 +6,7 @@ if (typeof module !== 'undefined') {
   module.exports = wwutils;
 }
 
+
 // hopefully we have from SJTest but if not define assert
 if (typeof assert === 'undefined') {
 	var assert = function(ok, msg) {
@@ -23,11 +24,11 @@ wwutils.setHash = function(unescapedHash) {
 	assert(unescapedHash[0] !== '#', "No leading # please on "+unescapedHash);	
 	if (history && history.pushState) {
 		let oldURL = window.location;
-		history.pushState(null, null, '#'+escape(unescapedHash));
+		history.pushState(null, null, '#'+encURI(unescapedHash));
 		fireHashChangeEvent({oldURL});
 	} else {
 		// fallback for old browsers
-		location.hash = '#'+escape(unescapedHash);
+		location.hash = '#'+encURI(unescapedHash);
 	}
 };
 /**
@@ -52,9 +53,9 @@ wwutils.modifyHash = function(newpath, newparams) {
 	let allparams = (params || {});
 	allparams = Object.assign(allparams, newparams);
 	if ( ! newpath) newpath = path || [];
-	let hash = escape(newpath.join('/'));
+	let hash = encURI(newpath.join('/'));
 	if (wwutils.yessy(allparams)) {
-		let kvs = wwutils.mapkv(allparams, (k,v) => escape(k)+"="+(v===null||v===undefined? '' : escape(v)) );
+		let kvs = wwutils.mapkv(allparams, (k,v) => encURI(k)+"="+(v===null||v===undefined? '' : encURI(v)) );
 		hash += "?" + kvs.join('&');
 	}	
 	if (history && history.pushState) {
@@ -423,3 +424,102 @@ wwutils.getHost = function(url) {
 // 	});
 // } // ./blockProp
 // wwutils.typeProp = typeProp;
+
+
+
+/** encoding.js  */
+/* file: encoding.js Convenient String encoding functions for common cases.
+ * These should ALWAYS be used when making html from json data.
+ * 
+ * There is also CSS.escape() in the file css.escape.js for css selectors, 
+ * which we get from https://developer.mozilla.org/en-US/docs/Web/API/CSS.escape
+ * and may become a standard.
+ * 
+ * @author Daniel  
+ */
+
+/** Url-encoding: e.g. encode a parameter value so you can append it onto a url.
+ * 
+ * Why? When there are 2 built in functions:
+ * escape(), and encodeURIComponent() has better unicode handling -- however it doesn't
+ escape 's which makes it dangerous, and it does unhelpfully encode /s and other legitimate url characters.
+ This is a convenient best-of-both.
+*/
+const encURI = function(urlPart) {
+	urlPart = encodeURIComponent(urlPart);
+	urlPart = urlPart.replace("'","%27");
+	// Keep some chars which are url safe
+	urlPart = urlPart.replace("%2F","/");
+	return urlPart;
+}
+wwutils.encURI = encURI;
+
+wwutils.decURI = function(urlPart) {
+	let decoded = decodeURIComponent(urlPart);
+	return decoded;
+}
+
+/** Quote-encoding: Encode for use as an html attribute value (i.e. encode quotes).
+ * This does _not_ add enclosing quotes.
+ * E.g. <a title="<%= attr(name) %>">
+ * @param text {?String} If null/undefined, returns ''
+*/
+wwutils.attr = function(text) {
+	//this must be of type String for the attr function not to fail
+	text = (text || '')+"";
+	return text
+		.replace(/&/g, '&amp;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;');
+}
+
+/** Plain text for use in html: tags are removed with clean, and entities are encoded */
+function plain(str) {
+	return encodeEntities(clean(str));
+}
+
+/**  
+ * @param s String to encode
+ */
+function encodeEntities(s){
+	var encodedText = $("<div>").text(s).html();
+	encodedText = encodedText.replace(/"/g, '&quot;');
+	return encodedText;
+};
+
+function decodeEntities(s){
+	return $("<div>").html(s).text();
+};
+
+function clean2(text, permittedTags, removeTags) {
+	if ( ! text) return '';
+	if (typeof(text) !== 'string') text = ''+text; // probably a number -- convert to a string
+	permittedTags = permittedTags || [];
+	
+	// make &s safe -- ??and disable any html entities??
+	text = (text || '').replace(/&/g, '&amp;');
+	
+	return text.replace(/<(\/?(\w+)(?:[^>]*))>/g, function (all, content, tag) {
+		if (permittedTags.indexOf(tag) > -1) {
+			return all;
+		}
+		if (remove) return '';
+		return '&lt;' + content + '&gt;';		
+	});
+}
+/** A strong anti-hacking defence: strips out all html tags 
+ * @param html {?string|number} return "" if falsy. */
+wwutils.clean = (html, permittedTags) => clean2(html, permittedTags, true);
+
+/**
+ * Escapes html tags, so they can be displayed in the DOM of a page, with the
+ * exception of any tags that are declared as permitted.
+ * 
+ * This is different from clean(), which will remove the tags to give plain text.
+ * 
+ * @param {String} text - The text to santise. Can be null (which will return '').
+ * @param {String[]} permittedTags - Any tags that should not be escaped.
+ * @returns {String} The sanitised text.
+**/
+wwutils.sanitiseHtml = (html, permittedTags) => clean2(html, permittedTags, false);
+

@@ -20,9 +20,25 @@ if (typeof(assert) === 'undefined') {
 
 
 describe('utils', function() {
-    this.timeout(200);
+    this.timeout(2000);
+
+	it('should encode decode unicode', function() {		
+		{
+			let eh = wwutils.encURI("“hello”");
+			assert(eh[0]==="%", eh);
+			let dh = wwutils.decURI(eh);
+			assert(dh === "“hello”", dh);
+		}
+    }); // ./enc dec
+
 
 	it('parseHash', function() {		
+		{	// unicode
+			// %uxxx encoding is NOT a standard (although it is what escape() produces!)
+			let ph = wwutils.parseHash('#?q='+encodeURIComponent("“hello”"));
+			assert(ph.path.length === 0);
+			assert(ph.params.q === "“hello”");
+		}
 		{
 			let ph = wwutils.parseHash('#?a=');
 			assert(ph.path.length === 0, JSON.stringify(ph));			

@@ -1,6 +1,6 @@
 {
   "name": "wwutils",
-  "version": "0.7.10",
+  "version": "0.8.0",
   "description": "Javascript utility functions from Winterwell",
   "main": "./bin/wwutils.js",
   "scripts": {
@@ -29,9 +29,9 @@
     ]
   },
   "devDependencies": {
-    "babel-cli": "^6.24.0",
-    "babel-preset-es2015": "^6.24.0",
-    "babel-register": "^6.24.0"
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.24.1"
   },
   "scripts": {
     "build": "babel src --out-dir bin",

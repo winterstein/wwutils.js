@@ -23,7 +23,7 @@ if (typeof assert === 'undefined') {
 wwutils.setHash = function(unescapedHash) {
 	assert(unescapedHash[0] !== '#', "No leading # please on "+unescapedHash);	
 	if (history && history.pushState) {
-		let oldURL = window.location;
+		let oldURL = ""+window.location;
 		history.pushState(null, null, '#'+encURI(unescapedHash));
 		fireHashChangeEvent({oldURL});
 	} else {
@@ -59,7 +59,7 @@ wwutils.modifyHash = function(newpath, newparams) {
 		hash += "?" + kvs.join('&');
 	}	
 	if (history && history.pushState) {
-		let oldURL = window.location;
+		let oldURL = ""+window.location;
 		history.pushState(null, null, '#'+hash);
 		// generate the hashchange event
 		fireHashChangeEvent({oldURL});
@@ -74,7 +74,7 @@ let fireHashChangeEvent = function({oldURL}) {
 	// NB IE9+ I think
 	// TODO add in newURL and oldURL
 	let e = new HashChangeEvent('hashchange', {
-		newURL: window.location,
+		newURL: ""+window.location,
 		oldURL: oldURL
 	});	
   	window.dispatchEvent(e);
@@ -195,11 +195,11 @@ wwutils.getUrlVars = function getUrlVars(url) {
 
 		if (e != -1) {
 			let k = kv.substring(0, e);
-			k = decodeURIComponent(k.replace(/\+/g, ' '));
+			k = wwutils.decURI(k.replace(/\+/g, ' '));
 			let v = '';
 			if (e !== kv.length - 1) {
 				v = kv.substring(e + 1);
-				v = decodeURIComponent(v.replace(/\+/g, ' '));
+				v = wwutils.decURI(v.replace(/\+/g, ' '));
 			}
 			urlVars[k] = v;
 		} else {

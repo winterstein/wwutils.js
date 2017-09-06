@@ -1,3 +1,4 @@
+import "babel-polyfill";
 /** wwutils.js: Javascript Utility Functions, common to several Winterwell projects
  */
 

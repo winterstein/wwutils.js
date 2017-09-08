@@ -48,8 +48,9 @@ wwutils.parseHash = function(hash = window.location.hash) {
 /**
  * @param {?String[]} newpath Can be null for no-change
  * @param {?Object} newparams Can be null for no-change
+ * @param {?Boolean} returnOnly If true, do not modify the hash -- just return what the new value would be (starting with #)
  */
-wwutils.modifyHash = function(newpath, newparams) {
+wwutils.modifyHash = function(newpath, newparams, returnOnly) {
 	const {path, params} = wwutils.parseHash();
 	let allparams = (params || {});
 	allparams = Object.assign(allparams, newparams);
@@ -59,12 +60,14 @@ wwutils.modifyHash = function(newpath, newparams) {
 		let kvs = wwutils.mapkv(allparams, (k,v) => encURI(k)+"="+(v===null||v===undefined? '' : encURI(v)) );
 		hash += "?" + kvs.join('&');
 	}	
+	if (returnOnly) {
+		return '#'+hash;
+	}
 	if (history && history.pushState) {
 		let oldURL = ""+window.location;
 		history.pushState(null, null, '#'+hash);
 		// generate the hashchange event
 		fireHashChangeEvent({oldURL});
-
 	} else {
 		// fallback for old browsers
 		location.hash = '#'+hash;

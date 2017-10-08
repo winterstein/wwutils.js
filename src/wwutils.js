@@ -75,8 +75,8 @@ wwutils.modifyHash = function(newpath, newparams, returnOnly) {
 };
 
 let fireHashChangeEvent = function({oldURL}) {
-	// NB IE9+ I think
-	// TODO add in newURL and oldURL
+	// NB IE9+ on mobile
+	// https://developer.mozilla.org/en-US/docs/Web/API/HashChangeEvent
 	let e = new HashChangeEvent('hashchange', {
 		newURL: ""+window.location,
 		oldURL: oldURL

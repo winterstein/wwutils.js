@@ -527,3 +527,16 @@ wwutils.clean = (html, permittedTags) => clean2(html, permittedTags, true);
 **/
 wwutils.sanitiseHtml = (html, permittedTags) => clean2(html, permittedTags, false);
 
+/**
+ * preventDefault + stopPropagation
+ * @param e {?Event|Object} a non-event is a no-op 
+ * @returns true (so it can be chained with &&)
+ */
+wwutils.stopEvent = (e) => {
+	if ( ! e) return true;
+	if (e.preventDefault) {
+		e.preventDefault();
+		e.stopPropagation();
+	}
+	return true;
+};

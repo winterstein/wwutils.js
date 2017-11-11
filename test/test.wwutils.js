@@ -1,11 +1,11 @@
 
-// let Utils;
-// if (typeof Utils === undefined && typeof require !== undefined) {
-// Utils = require('../bin/wwutils.js');
-// }
-// if ( ! Utils && ! blockProp) {
-// 	console.error("No wwutils :(");
-// }
+let Utils;
+if (typeof Utils === undefined && typeof require !== undefined) {
+Utils = require('../bin/wwutils.js');
+}
+if ( ! Utils ) {
+	console.error("No wwutils :(");
+}
 
 if (typeof(assert) === 'undefined') {
     function assert(ok, msg) {

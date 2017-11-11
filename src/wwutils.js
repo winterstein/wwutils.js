@@ -333,6 +333,7 @@ const asPromise = function(x) {
 };
 wwutils.asPromise = asPromise;
 
+let bphush = false;
 /**
  * Rig obj so that any use of obj.propName will trigger an Error.
  * @param {!String} propName
@@ -342,16 +343,18 @@ wwutils.asPromise = asPromise;
 const blockProp = function(obj, propName, message) {	
 	assert(typeof(propName) === 'string');
 	if ( ! message) message = "Using this property indicates old/broken code.";
+	// already blocked?	
+	bphush = true;
 	try {
-		// already blocked?	
 		let v = obj[propName];
 	} catch (err) {
 		return obj;
 	}
+	bphush = false;
 	if (obj[propName] !== undefined) {
 		// already set to a value :(
 		const ex = new Error("Having "+propName+" is blocked! "+message);
-		console.error(ex, this); // react can swallow stuff
+		if ( ! bphush) console.error(ex, this); // react can swallow stuff
 		throw ex;
 	}
 	if ( ! Object.isExtensible(obj)) {	
@@ -361,12 +364,12 @@ const blockProp = function(obj, propName, message) {
 	Object.defineProperty(obj, propName, { 
 		get: function () { 
 			const ex = new Error(propName+" is blocked! "+message); 
-			console.error(ex, this); // react can swallow stuff
+			if ( ! bphush) console.error(ex, this); // react can swallow stuff
 			throw ex;					
 		},
 		set: function () { 
 			const ex = new Error("Set "+propName+" is blocked! "+message);
-			console.error(ex, this); // react can swallow stuff
+			if ( ! bphush) console.error(ex, this); // react can swallow stuff
 			throw ex;		
 		} 
 	});

@@ -86,10 +86,27 @@ let fireHashChangeEvent = function({oldURL}) {
 
 /**
  * Map fn across the (key, value) properties of obj.
- * ??Is there a ntive way to do this??
+ * ??Is there a native way to do this??
  */
 wwutils.mapkv = function(obj, fn) {
 	return Object.keys(obj).map(k => fn(k, obj[k]));
+};
+
+/**
+ * @param src {!String} url for the script
+ * @param onLoad {?Function} called on-load and on-error
+ */
+wwutils.addScript = function(src, onLoad) {
+	let script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = src;
+	if (onLoad) {
+		script.addEventListener('error', onLoad); 
+		// c.f. https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick
+		script.addEventListener('load', onLoad);
+	}
+	var head = document.getElementsByTagName("head")[0];
+	(head || document.body).appendChild(script);	
 };
 
 const XId = {};

@@ -272,6 +272,13 @@ const yessy = function(val) {
 }
 wwutils.yessy = yessy;
 
+/**
+ * convenience for not-null not-undefined (but can be false, 0, or "")
+ */
+wwutils.is = function(x) {
+	return x !== undefined && x !== null;
+};
+
 
 wwutils.getStackTrace = function() {
 	try {

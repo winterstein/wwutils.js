@@ -95,19 +95,23 @@ wwutils.mapkv = function(obj, fn) {
 /**
  * @param src {!String} url for the script
  * @param onLoad {?Function} called on-load and on-error
+ * 
+ * NB: copy-pasta of Good-Loop's unit.js addScript()
  */
-wwutils.addScript = function(src, onLoad) {
+wwutils.addScript = function(src, {async, onload, onerror}) {
 	let script = document.createElement('script');
+	script.setAttribute( 'src', src);
+	if (onerror) script.addEventListener('error', onerror); 
+	if (onload) script.addEventListener('load', onload);
+	script.async = async;
 	script.type = 'text/javascript';
-	script.src = src;
-	if (onLoad) {
-		script.addEventListener('error', onLoad); 
-		// c.f. https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick
-		script.addEventListener('load', onLoad);
-	}
+	// c.f. https://stackoverflow.com/questions/538745/how-to-tell-if-a-script-tag-failed-to-load
+	// c.f. https://stackoverflow.com/questions/6348494/addeventlistener-vs-onclick
 	var head = document.getElementsByTagName("head")[0];
-	(head || document.body).appendChild(script);	
+	(head || document.body).appendChild( script );	
+	document.body.appendChild(script);
 };
+
 
 const XId = {};
 wwutils.XId = XId;

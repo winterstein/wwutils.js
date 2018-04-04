@@ -1,4 +1,3 @@
-import "babel-polyfill";
 /**
  * file: Printer.js Purpose: converts objects into html.
  *

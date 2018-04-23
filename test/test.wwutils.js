@@ -22,6 +22,44 @@ if (typeof(assert) === 'undefined') {
 describe('utils', function() {
     this.timeout(2000);
 
+	it('asNum', function() {		
+		{	// simple decimal
+			let a = wwutils.asNum("17.4");
+			assert(a===17.4, a);
+			assert(_.isNumber(a), typeof(a));
+		}
+		{	// comma
+			let a = wwutils.asNum("1,700");
+			assert(a===1700, a);
+		}
+		{	// £
+			let a = wwutils.asNum("£17.40");
+			assert(a===17.4, a);
+		}
+		{	// blank = undefined
+			let a = wwutils.asNum("");
+			assert(a===undefined, a);
+		}
+		{
+			let a = wwutils.asNum();
+			assert(a===undefined, a);
+		}
+		{
+			let a = wwutils.asNum(false);
+			assert(a===undefined, a);
+		}
+		{
+			let a = wwutils.asNum(null);
+			assert(a===undefined, a);
+		}
+		{	// number in
+			let a = wwutils.asNum(12.4);
+			assert(a===12.4, a);			
+			assert(_.isNumber(a), typeof(a));
+		}
+    }); // ./asNum
+
+
 	it('should encode decode unicode', function() {		
 		{
 			let eh = wwutils.encURI("“hello”");

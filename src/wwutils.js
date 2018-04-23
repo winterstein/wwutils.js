@@ -92,6 +92,27 @@ wwutils.mapkv = function(obj, fn) {
 };
 
 /**
+ * Strip commas £/$/euro and parse float.
+ * @param {Number|String} v 
+ * @returns Number. undefined/null/''/false are returned as undefined.
+ */
+wwutils.asNum = v => {
+	if (v===undefined || v===null || v==='' || v===false || v===true) {
+		return undefined;
+	}
+	if (_.isNumber(v)) return v;
+	// strip any commas, e.g. 1,000
+	if (_.isString(v)) {
+		v = v.replace(/,/g, "");
+		// £ / $ / euro
+		v = v.replace(/^(-)?[£$\u20AC]/, "$1");
+	}
+	// See https://stackoverflow.com/questions/12227594/which-is-better-numberx-or-parsefloatx
+	return +v;
+};
+
+
+/**
  * @param src {!String} url for the script
  * @param onLoad {?Function} called on-load and on-error
  * 

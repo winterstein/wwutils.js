@@ -70,6 +70,19 @@ describe('utils', function() {
     }); // ./enc dec
 
 
+	it('should decode bad formats if asked', function() {		
+		let vs = wwutils.getUrlVars("foo?a=%%DfP_smell%%", true);
+		assert(vs.a==="%%DfP_smell%%", vs);
+
+		let vs2 = {};
+		try {
+			vs2 = wwutils.getUrlVars("foo?a=%%DfP_smell%%", false);			
+		} catch(err) {
+			console.warn("as expected "+err);
+		}
+		assert( ! vs2.a);
+    }); // ./enc dec
+
 	it('parseHash', function() {		
 		{	// unicode
 			// %uxxx encoding is NOT a standard (although it is what escape() produces!)

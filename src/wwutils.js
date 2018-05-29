@@ -221,8 +221,10 @@ XId.prettyName = function(xid) {
 
 /** Parse url arguments
  * @param [url] Optional, the string to be parsed, will default to window.location when not provided.
+ * @param {?Boolean} lenient If true, if a decoding error is hit, it is swallowed and the raw string is used.
+ * Use-case: for parsing urls that may contain adtech macros.
  * @returns a map */
-wwutils.getUrlVars = function getUrlVars(url) {
+wwutils.getUrlVars = function getUrlVars(url, lenient) {
 	url = url || window.location.href;
 	// url = url.replace(/#.*/, ''); Why was this here?! DW
 	var s = url.indexOf("?");
@@ -240,11 +242,18 @@ wwutils.getUrlVars = function getUrlVars(url) {
 
 		if (e != -1) {
 			let k = kv.substring(0, e);
-			k = wwutils.decURI(k.replace(/\+/g, ' '));
+			k = k.replace(/\+/g, ' ');
+			k = wwutils.decURI(k);
 			let v = '';
 			if (e !== kv.length - 1) {
 				v = kv.substring(e + 1);
-				v = wwutils.decURI(v.replace(/\+/g, ' '));
+				v = v.replace(/\+/g, ' ');
+				try {
+					v = wwutils.decURI(v);
+				} catch(err) {
+					if ( ! lenient) throw err;
+					console.warn("wwutils.js getUrlVars() decode error for "+kv+" "+err);
+				}
 			}
 			urlVars[k] = v;
 		} else {

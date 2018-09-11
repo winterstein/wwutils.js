@@ -17,6 +17,13 @@ if (typeof assert === 'undefined') {
 }
 
 /**
+ * Join by " ", skipping nulls
+ */
+wwutils.join = (...things) => {
+	return things.filter(x => x).join(" ");
+};
+
+/**
  * @param unescapedHash e.g. "foo=bar"
  * This must be the whole post-hash state.
  */

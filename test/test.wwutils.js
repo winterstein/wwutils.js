@@ -22,6 +22,21 @@ if (typeof(assert) === 'undefined') {
 describe('utils', function() {
     this.timeout(2000);
 
+	it('join by space', function() {	
+		{	// kitchen sink
+			let a = wwutils.join(null, "foo", null, null, "bar", null);
+			assert(a==="foo bar", a);
+		}
+		{	// empty
+			let a = wwutils.join();
+			assert(a==="", a);
+			let b = wwutils.join(null);
+			assert(b==="", b);
+			let c = wwutils.join(null, null);
+			assert(c==="", c);
+		}
+	});
+
 	it('asNum', function() {		
 		{	// simple decimal
 			let a = wwutils.asNum("17.4");

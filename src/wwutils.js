@@ -101,13 +101,14 @@ wwutils.mapkv = function(obj, fn) {
 /**
  * Strip commas £/$/euro and parse float.
  * @param {Number|String} v 
- * @returns Number. undefined/null/''/false are returned as undefined. 
- * Bad inputs also return undefined (this makes for slightly simpler usage code)
+ * @returns Number. undefined/null/''/false/NaN are returned as undefined. 
+ * Bad inputs also return undefined (this makes for slightly simpler usage code
+ *  -- you can't test `if (x)` cos 0 is falsy, but you can test `if (x!==undefined)`)
  */
 wwutils.asNum = v => {
-	if (v===undefined || v===null || v==='' || v===false || v===true) {
+	if (v===undefined || v===null || v==='' || v===false || v===true || Number.isNaN(v)) {
 		return undefined;
-	}	
+	}
 	if (_.isNumber(v)) return v;
 	// strip any commas, e.g. 1,000
 	if (_.isString(v)) {
@@ -118,7 +119,7 @@ wwutils.asNum = v => {
 	// See https://stackoverflow.com/questions/12227594/which-is-better-numberx-or-parsefloatx
 	const nv = +v;
 	if (Number.isNaN(nv)) {
-		return null; // bad input
+		return null; // bad string input
 	}
 	return nv;
 };

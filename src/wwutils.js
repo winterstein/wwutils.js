@@ -92,7 +92,8 @@ let fireHashChangeEvent = function({oldURL}) {
 
 /**
  * Map fn across the (key, value) properties of obj.
- * ??Is there a native way to do this??
+ * 
+ * Or you could just use Object.entries directly -- but IE doesn't support it yet (Jan 2019)
  */
 wwutils.mapkv = function(obj, fn) {
 	return Object.keys(obj).map(k => fn(k, obj[k]));

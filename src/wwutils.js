@@ -191,9 +191,9 @@ XId.dewart = function(xid) {
  * @returns the service part of the XId, e.g. "twitter"
  */
 XId.service = function(xid) {
-	assert(_.isString(xid), "orla-utils.js service(): xid is not a string! " + xid);
+	assert(_.isString(xid), "wwutils.js service(): xid is not a string! " + xid);
 	var i = xid.lastIndexOf('@');
-	assert(i != -1, "orla-utils.js dewart(): No @ in xid: " + xid);
+	assert(i != -1, "wwutils.js dewart(): No @ in xid: " + xid);
 	return xid.substring(i + 1);
 };
 

@@ -159,7 +159,7 @@ XId.id = function(xid) {
 		throw new Error("XId.id - no input "+xid);
 	}
 	var i = xid.lastIndexOf('@');
-	assert(i!=-1, "orla-utils.js - id: No @ in xid "+xid);
+	assert(i!=-1, "wwutils.js - id: No @ in xid "+xid);
 	return xid.substring(0, i);
 };
 
@@ -171,7 +171,7 @@ XId.id = function(xid) {
  */
 XId.dewart = function(xid) {
 	if ( ! xid) return "";
-	assert(_.isString(xid), "orla-utils.js - dewart: xid is not a string! " + xid);
+	assert(_.isString(xid), "wwutils.js - dewart: xid is not a string! " + xid);
 	// NB: handle invalid XId (where its just a name fragment)
 	var id = xid.indexOf('@') == -1? xid : XId.id(xid);
 	if (id.length < 3) return id;
@@ -193,7 +193,7 @@ XId.dewart = function(xid) {
 XId.service = function(xid) {
 	assert(_.isString(xid), "wwutils.js service(): xid is not a string! " + xid);
 	var i = xid.lastIndexOf('@');
-	assert(i != -1, "wwutils.js dewart(): No @ in xid: " + xid);
+	assert(i != -1, "wwutils.js service(): No @ in xid: " + xid);
 	return xid.substring(i + 1);
 };
 
@@ -226,8 +226,8 @@ XId.prettyName = function(xid) {
  * @returns An xid string in the form 'id@service'
  */
  XId.xid = function(id, service) {
- 	assert(_.isString(id), "orla-utils.js xid(): id is not a string! " + id);
- 	assert(_.isString(service), "orla-utils.js xid(): service is not a string! " + service);
+ 	assert(_.isString(id), "utils.js xid(): id is not a string! " + id);
+ 	assert(_.isString(service), "utils.js xid(): service is not a string! " + service);
  	return id + '@' + service;
  }
 

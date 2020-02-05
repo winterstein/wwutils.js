@@ -98,19 +98,20 @@ describe('utils', function() {
 		assert( ! vs2.a);
     }); // ./enc dec
 
-	it('parseHash', function() {		
-		{	// unicode
-			// %uxxx encoding is NOT a standard (although it is what escape() produces!)
-			let ph = wwutils.parseHash('#?q='+encodeURIComponent("“hello”"));
-			assert(ph.path.length === 0);
-			assert(ph.params.q === "“hello”");
-		}
+	it('parseHash - blank a', function() {		
 		{
 			let ph = wwutils.parseHash('#?a=');
-			assert(ph.path.length === 0, JSON.stringify(ph));			
-			assert( ! ph.params.a, JSON.stringify(ph));
-			assert(ph.params.a === "", JSON.stringify(ph));
+			assert(ph.path.length === 0, "path.length! "+JSON.stringify(ph));			
+			assert( ! ph.params.a, "a! "+JSON.stringify(ph));
 		}
+	});
+	it('parseHash - unicode', function() {		
+		// %uxxx encoding is NOT a standard (although it is what escape() produces!)
+		let ph = wwutils.parseHash('#?q='+encodeURIComponent("“hello”"));
+		assert(ph.path.length === 0);
+		assert(ph.params.q === "“hello”");		
+	});
+	it('parseHash', function() {		
 		{
 			let ph = wwutils.parseHash('#foo?a=1');
 			assert(ph.path[0] === 'foo', JSON.stringify(ph));			

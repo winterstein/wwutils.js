@@ -253,26 +253,25 @@ wwutils.getUrlVars = function getUrlVars(url, lenient) {
 		var kv = kvs[i];
 		if ( ! kv) continue; // ignore trailing &
 		var e = kv.indexOf("=");
-
-		if (e != -1) {
-			let k = kv.substring(0, e);
-			k = k.replace(/\+/g, ' ');
-			k = wwutils.decURI(k);
-			let v = '';
-			if (e !== kv.length - 1) {
-				v = kv.substring(e + 1);
-				v = v.replace(/\+/g, ' ');
-				try {
-					v = wwutils.decURI(v);
-				} catch(err) {
-					if ( ! lenient) throw err;
-					console.warn("wwutils.js getUrlVars() decode error for "+kv+" "+err);
-				}
-			}
-			urlVars[k] = v;
-		} else {
-			urlVars[kv] = '';
+		if (e == -1) {
+			continue;
 		}
+		let k = kv.substring(0, e);
+		k = k.replace(/\+/g, ' ');
+		k = wwutils.decURI(k);
+		let v = null; //'';
+		if (e === kv.length - 1) continue;
+		v = kv.substring(e + 1);
+		v = v.replace(/\+/g, ' ');
+		try {
+			v = wwutils.decURI(v);
+		} catch(err) {
+			if ( ! lenient) throw err;
+			console.warn("wwutils.js getUrlVars() decode error for "+kv+" "+err);
+		}
+		// hack for boolean
+		if (v==='true') v = true; if (v==='false') v = false;
+		urlVars[k] = v;
 	}
 
 	return urlVars;
